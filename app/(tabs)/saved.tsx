@@ -3,7 +3,7 @@ import React from 'react'
 
 type Props = {}
 
-const Page = (props: Props) => {
+const Saved = (props: Props) => {
   return (
     <View style={styles.container}>
       <Text>Saved Screen</Text>
@@ -11,7 +11,7 @@ const Page = (props: Props) => {
   )
 }
 
-export default Page
+export default Saved
 
 const styles = StyleSheet.create({
   container: {

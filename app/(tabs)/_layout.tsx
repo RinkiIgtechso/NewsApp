@@ -9,7 +9,9 @@ import { Text } from 'react-native'
 const TabLayout = () => {
 
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{ headerShown: false }}
+    >
     {/* <Tabs tabBar={(props) => <TabBar {...props} />}> */}
       <Tabs.Screen
         name="index"
