@@ -4,6 +4,7 @@ import TabBarButton from "@/components/TabBarButton";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { useState } from "react";
 import { Colors } from "@/constants/Colors";
+import React from "react";
 
 
 export const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps)  => {

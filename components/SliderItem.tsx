@@ -1,9 +1,11 @@
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { NewsDataType } from '@/types'
-import { SharedValue } from 'react-native-reanimated';
-import {LinearGradient} from "expo-linear-gradient"
+import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import {LinearGradient} from "expo-linear-gradient";
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Link } from 'expo-router';
 
 type Props = {
     slideItem: NewsDataType,
@@ -14,26 +16,53 @@ type Props = {
 const { width } = Dimensions.get('screen');
  
 const SliderItem = ({slideItem, index, scrollX}: Props) => {
-   
+    
+   const rnStyle = useAnimatedStyle(()=>{
+    return {
+        transform:[
+            {
+                translateX: interpolate(
+                    scrollX.value,
+                    [(index-1) * width, index * width, (index + 1) * width],
+                    [-width * 0.15, 0, width * 0.15],
+                    Extrapolation.CLAMP
+                )
+            },
+            {
+                scale: interpolate(
+                    scrollX.value,
+                    [(index-1) * width, index * width, (index + 1) * width],
+                    [0.9, 1, 0.9],
+                    Extrapolation.CLAMP
+                )
+            }
+        ]
+    }
+   })
+ 
   return (
-    <View style={styles.itemWrapper}>
-        {slideItem.image_url ? (
-            <Image source={{ uri: slideItem.image_url }} style={styles.image} />
-        ) : (
-            <Text>No Image</Text>
-        )}
-        <LinearGradient colors={['transparent', "rgba(0, 0, 0, 0.5)"]} style={styles.background}>
-            <View>
-                <View style={styles.sourceInfo}>
-                    {slideItem.source_icon  && (
-                        <Image source={{ uri: slideItem.source_icon }} style={styles.sourceIcon} />
-                    )}
-                    <Text style={styles.sourceName}>{slideItem.source_name}</Text>
-                </View>
-                <Text style={styles.title} numberOfLines={2}>{slideItem.title || 'No Title'}</Text>
-            </View>
-        </LinearGradient>
-    </View>
+    <Link href={`/news/${String(slideItem.article_id)}`} asChild>
+        <TouchableOpacity>
+            <Animated.View style={[styles.itemWrapper, rnStyle]} key={slideItem.article_id}>
+                {slideItem.image_url ? (
+                    <Image source={{ uri: slideItem.image_url }} style={styles.image} />
+                ) : (
+                    <Text>No Image</Text>
+                )}
+                <LinearGradient colors={['transparent', "rgba(0, 0, 0, 0.5)"]} style={styles.background}>
+                    <View>
+                        <View style={styles.sourceInfo}>
+                            {slideItem.source_icon  && (
+                                <Image source={{ uri: slideItem.source_icon }} style={styles.sourceIcon} />
+                            )}
+                            <Text style={styles.sourceName}>{slideItem.source_name}</Text>
+                        </View>
+                        <Text style={styles.title} numberOfLines={2}>{slideItem.title || 'No Title'}</Text>
+                    </View>
+                </LinearGradient>
+            </Animated.View>
+        </TouchableOpacity>
+    </Link>
   )
 }
 
